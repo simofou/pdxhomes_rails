@@ -15,5 +15,13 @@ module Pdxhomes
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    # Autoload lib/ folder including all subdirectories
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+
+    console do
+      ActiveRecord::Base.connection
+    end
   end
+
 end

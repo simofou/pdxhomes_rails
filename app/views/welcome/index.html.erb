@@ -1,0 +1,14 @@
+
+<%= simple_form_for @home, url: "/run", method: :post do |f| %>
+  <%= f.input :address, label: "enter pdx address:" %>
+  <%= f.button :submit, value: "run" %>
+<% end %> 
+
+<!--
+<%= form_with url: "/run", method: :post do |f| %>
+  <%= f.label " enter pdx address:" %>
+  <%= f.text_field :address %>
+  <%= f.submit "run" %>
+<% end %>-->
+
+
