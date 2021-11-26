@@ -13,7 +13,7 @@ module Zillow::ZillowApi
 
   API_KEY = ENV['ZILLOW_API_KEY']
 
-  def self.get_zestimate(location_coordinates, address)
+  def get_zestimate(location_coordinates, address)
     address = address.upcase
     url = "https://api.bridgedataoutput.com/api/v2/zestimates"
   

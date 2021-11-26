@@ -1,6 +1,8 @@
 class Home
   include ActiveModel::Validations
   include ActiveModel::Conversion
+  include PortlandMaps::PortlandMapsApi
+  include Zillow::ZillowApi
   extend ActiveModel::Naming
 
   attr_accessor :address
@@ -21,51 +23,55 @@ class Home
   end
 
   def owner
-    PortlandMaps::PortlandMapsApi.get_homeowner(address)
+    get_homeowner(address)
   end
 
   def full_address
-    PortlandMaps::PortlandMapsApi.get_full_address(address)
+    get_full_address(address)
   end
 
   def lot_size
-    PortlandMaps::PortlandMapsApi.get_lot_size(address)
+    get_lot_size(address)
   end
 
   def lot_zoning
-    PortlandMaps::PortlandMapsApi.get_lot_zoning(address)
+    get_lot_zoning(address)
   end
 
   def market_value
-    PortlandMaps::PortlandMapsApi.get_market_value(address)
+    market_value ||= get_market_value(address)
   end
 
   def real_market_value
-    PortlandMaps::PortlandMapsApi.get_real_market_value(address)
+    get_real_market_value(address)
   end
 
   def property_taxes
-    PortlandMaps::PortlandMapsApi.get_property_taxes(address)
+    get_property_taxes(address)
   end
 
   def size
-    PortlandMaps::PortlandMapsApi.get_home_size(address)
+    get_home_size(address)
   end
 
   def foundation_type
-    PortlandMaps::PortlandMapsApi.get_foundation_type(address)
+    get_foundation_type(address)
   end
 
   def year_built
-    PortlandMaps::PortlandMapsApi.get_year_built(address)
+    get_year_built(address)
   end
 
   def neighborhood
-    PortlandMaps::PortlandMapsApi.get_neighborhood(address)
+    get_neighborhood(address)
   end
 
   def zestimate
-    location_coordinates = PortlandMaps::PortlandMapsApi.get_location_coordinates(address)
-    Zillow::ZillowApi.get_zestimate(location_coordinates, address)
+    location_coordinates = get_location_coordinates(address)
+    zestimate ||= get_zestimate(location_coordinates, address)
+  end
+
+  def foostimate
+    zestimate + market_value * 3 / 4
   end
 end
