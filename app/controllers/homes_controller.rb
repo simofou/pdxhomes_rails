@@ -1,7 +1,11 @@
 class HomesController < ApplicationController
-  require_relative "portland_maps.rb"
-
+  
   def index
-    @address = params["address"]
+    redirect_to root_path
+  end
+
+  def create
+    address = params["home"]["address"]
+    @home = Home.new(address)
   end
 end

@@ -7,12 +7,12 @@ class Home
 
   attr_accessor :address
 
-  validates :address, :presence => true
+  validates :address, presence: true
   # # validates :address do |record, attr, value|
   # #   record.errors.add attr, "starts with z." if value.start_with?("z")
   # # end
-  # basic validations
-  # add a form validation that makes sure it's a real pdx address
+
+  FOOSTIMATE_CONSTANT = 1.069
 
   def initialize(address="")
     @address = address
@@ -67,11 +67,16 @@ class Home
   end
 
   def zestimate
-    location_coordinates = get_location_coordinates(address)
+    location_coordinates ||= get_location_coordinates(address)
     zestimate ||= get_zestimate(location_coordinates, address)
   end
 
   def foostimate
-    zestimate + market_value * 3 / 4
+    z = zestimate.gsub(",","").to_i
+    m = market_value.gsub(",","").to_i
+
+    foostimate = ((z + m * 3) / 4) * FOOSTIMATE_CONSTANT
+
+    foostimate.to_i.to_s.reverse.scan(/.{1,3}/).join(',').reverse
   end
 end

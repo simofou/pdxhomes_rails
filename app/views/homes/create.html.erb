@@ -1,0 +1,24 @@
+<%= simple_form_for @home do |f| %>
+  <%= f.label " enter pdx address:" %>
+  <%= f.input :address, 
+    required: true,
+    label: false,
+    input_html: { class: "input" } %>
+  <%= f.button :submit, value: "run", class: "run" %>
+<% end %>
+
+<p>address: <%= @home.address%> </p>
+<!-- <p>owner: <%= @home.owner%> </p>
+<p>neighborhood: <%= @home.neighborhood%> </p>
+<p>house size: <%= @home.size%> sq ft </p>
+<p>year built: <%= @home.year_built%> </p>
+<p>lot size: <%= @home.lot_size%> </p>
+<p>lot zoning: <%= @home.lot_zoning%> </p>
+<p>market value: <%= @home.market_value%> </p>
+<p>property taxes: <%= @home.property_taxes%> </p>
+<p>foundation type: <%= @home.foundation_type%> </p>
+<p>zestimate: <%= @home.zestimate%> </p>
+<p>pdxhomes estimate: <%= @home.foostimate%> </p> -->
+
+
+

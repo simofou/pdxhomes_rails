@@ -59,10 +59,10 @@ module PortlandMaps::PortlandMapsApi
 
   # Portland Maps API methods
 
-  def connection()
+  def connection
     url = "https://www.portlandmaps.com/api/"
 
-    @connection = Faraday.new(
+    @connection ||= Faraday.new(
       url: "#{url}",
       params: {api_key: "#{API_KEY}"},
       headers: {"Content-Type" => "application/json"}
@@ -219,11 +219,11 @@ module PortlandMaps::PortlandMapsApi
     segments = body["improvements"]["details"].map{|seg| seg["segment_type"]}
     foundation_type = body["improvements"]["foundation_type"].downcase
 
-    foundation_type += if foundation_type == "concrete"
+    if foundation_type == "concrete"
       if segments.to_s.include? "BSMT"
-        " (basement)"
+        foundation_type += " (basement)"
       else
-        " (other)"
+        foundation_type += " (other)"
       end
     end
 
