@@ -1,24 +1,52 @@
-<%= simple_form_for @home do |f| %>
-  <%= f.label " enter pdx address:" %>
-  <%= f.input :address, 
-    required: true,
-    label: false,
-    input_html: { class: "input" } %>
-  <%= f.button :submit, value: "run", class: "run" %>
-<% end %>
+<!doctype html>
 
-<p>address: <%= @home.address%> </p>
-<!-- <p>owner: <%= @home.owner%> </p>
-<p>neighborhood: <%= @home.neighborhood%> </p>
-<p>house size: <%= @home.size%> sq ft </p>
-<p>year built: <%= @home.year_built%> </p>
-<p>lot size: <%= @home.lot_size%> </p>
-<p>lot zoning: <%= @home.lot_zoning%> </p>
-<p>market value: <%= @home.market_value%> </p>
-<p>property taxes: <%= @home.property_taxes%> </p>
-<p>foundation type: <%= @home.foundation_type%> </p>
-<p>zestimate: <%= @home.zestimate%> </p>
-<p>pdxhomes estimate: <%= @home.foostimate%> </p> -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>pdxhomes</title>
+</head>
+
+<body>
+  <div class="form">
+    <%= simple_form_for @home do |f| %>
+      <%= f.label " enter pdx address:" %>
+      <%= f.input :address, 
+        required: true,
+        label: false,
+        input_html: { class: "input" }
+      %>
+      <%= f.button :submit, value: "run", class: "run", data: { disable_with: "running..." } %>
+    <% end %>
+  </div>
+
+  <div class="data">
+    <p> <span class="title"> address: </span> <%= @home.address%> </p>
+    <p> <span class="title"> owner: </span> <%= @home.owner%> </p>
+    <p> <span class="title"> neighborhood: </span> <%= @home.neighborhood%> </p>
+    <p> <span class="title"> house size: </span> <%= @home.size%> sq ft </p>
+    <p> <span class="title"> year built: </span> <%= @home.year_built%> </p>
+    <p> <span class="title"> lot size: </span> <%= @home.lot_size%> </p>
+    <p> <span class="title"> lot zoning: </span> <%= @home.lot_zoning%> </p>
+    <p> <span class="title"> property taxes: </span> <%= @home.property_taxes%> </p>
+    <p> <span class="title"> foundation type: </span> <%= @home.foundation_type%> </p>
+    <p> <span class="title"> market value: </span> <%= @home.market_value%> </p>
+    <p> <span class="title"> zestimate: </span> <%= @home.zestimate%> </p>
+    <p> <span class="title"> pdxhomes estimate: </span> <%= @home.foostimate%> </p>
+  </div>
+
+  <p>-</p>
+
+  <div class="contact">
+    <a href = "mailto: sofoucher@ucdavis.edu">contact</a>
+  </div>
+
+  <div class="copyright">
+     <p>copyright © 2021 pdxhomes</p>
+  </div>
+</body>
+</html>
 
 
-
+<link rel="shortcut icon" href="https://i.imgur.com/iDXEe0c.png"/>

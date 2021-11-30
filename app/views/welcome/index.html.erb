@@ -1,9 +1,34 @@
+<!doctype html>
 
-<%= simple_form_for @home do |f| %>
-  <%= f.label " enter pdx address:" %>
-  <%= f.input :address, 
-    required: true,
-    label: false,
-    input_html: { class: "input" } %>
-  <%= f.button :submit, value: "run", class: "run", data: { disable_with: "running..." } %>
-<% end %>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>pdxhomes</title>
+</head>
+
+<body>
+  <div class="form">
+    <%= simple_form_for @home do |f| %>
+      <%= f.label " enter pdx address:" %>
+      <%= f.input :address, 
+        required: true,
+        label: false,
+        input_html: { class: "input", placeholder: "7107 SE Holgate blvd" }
+      %>
+      <%= f.button :submit, value: "run", class: "run", data: { disable_with: "running..." } %>
+    <% end %>
+  </div>
+
+  <p>-</p>
+
+  <div class="contact">
+    <a href = "mailto: somfoucher@gmail.com">contact</a>
+  </div>
+
+  <div class="copyright">
+     <p>copyright © 2021 pdxhomes</p>
+  </div>
+</body>
+</html>

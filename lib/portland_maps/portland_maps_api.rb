@@ -62,7 +62,7 @@ module PortlandMaps::PortlandMapsApi
   def connection
     url = "https://www.portlandmaps.com/api/"
 
-    @connection ||= Faraday.new(
+    connection ||= Faraday.new(
       url: "#{url}",
       params: {api_key: "#{API_KEY}"},
       headers: {"Content-Type" => "application/json"}
@@ -73,10 +73,10 @@ module PortlandMaps::PortlandMapsApi
     endpoint = "assessor/"
     address = address.to_s
 
-    response = connection.get("#{endpoint}") do |request|
+    response ||= connection.get("#{endpoint}") do |request|
       request.params["address"] = "#{address}"
     end
-    
+
     response_body = JSON.parse(response.body)
 
     if response_body["status"] != "error"
@@ -99,7 +99,7 @@ module PortlandMaps::PortlandMapsApi
     else
       puts "invalid address. please enter a valid addy foo"
       puts "try again foo"
-      response_body # nil
+      response_body # nil (stop calling stuff)
     end
   end
 

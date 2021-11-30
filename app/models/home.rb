@@ -69,14 +69,19 @@ class Home
   def zestimate
     location_coordinates ||= get_location_coordinates(address)
     zestimate ||= get_zestimate(location_coordinates, address)
+
+    zestimate.nil? ? " n/a" : zestimate
   end
 
   def foostimate
-    z = zestimate.gsub(",","").to_i
-    m = market_value.gsub(",","").to_i
+    if zestimate != " n/a"
+      z = zestimate.gsub(",","").to_i
+      m = market_value.gsub(",","").to_i
 
-    foostimate = ((z + m * 3) / 4) * FOOSTIMATE_CONSTANT
-
-    foostimate.to_i.to_s.reverse.scan(/.{1,3}/).join(',').reverse
+      foostimate = ((z + m * 3) / 4) * FOOSTIMATE_CONSTANT
+      foostimate.to_i.to_s.reverse.scan(/.{1,3}/).join(',').reverse
+    else
+      " n/a"
+    end
   end
 end

@@ -3,21 +3,31 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body {
-  background-color: pink;
+  background-color: black;
   font-family: "Courier New";
+  color: limegreen;
+  text-align: center;
+  font-size: 20px;
 }
 
 .input {
-  width: 60%;
   margin-top: 5px;
   margin-bottom: 5px;
+  font-size: 20px;
+  font-family: "Courier New";
+}
+
+.label {
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
 }
 
 /*Run Button*/
-
 .run {
-    /*background-color:# 2fd62f;*/
-    background-color:  gray;
+    background-color:  mediumpurple;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
@@ -25,14 +35,26 @@ body {
     display:inline-block;
     color:#fafafa;
     font-family:"Courier New";
-    font-size:12px;
-    font-weight:bold;
+    font-size:20px;
     padding:7px 24px;
     text-decoration:none;
     text-shadow:0px 0px 0px #70706f;
 }.run:hover {
-    background-color:#2fbf0f;
+    background-color:limegreen;
 }.run:active {
-    position:relative;
+    position:static;
     top:1px;
 }  
+
+.contact a:link{ 
+  color: mediumpurple;
+  font-size: 15px;
+}
+.contact a:hover {
+  color: limegreen;
+}
+
+.copyright{
+  font-size: 12px;
+  bottom: 0;
+}
