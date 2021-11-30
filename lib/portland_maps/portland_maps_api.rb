@@ -10,7 +10,6 @@ module PortlandMaps::PortlandMapsApi
   API_KEY = ENV['PDX_MAPS_API_KEY']
 
   # Helper methods
-
   def owner_is_human?(owner)
     owner.include? ','
   end
@@ -58,41 +57,13 @@ module PortlandMaps::PortlandMapsApi
   end
 
   # Portland Maps API methods
-
-  def connection
-    url = "https://www.portlandmaps.com/api/"
-
-    connection ||= Faraday.new(
-      url: "#{url}",
-      params: {api_key: "#{API_KEY}"},
-      headers: {"Content-Type" => "application/json"}
-    )
-  end
-
-  def get_request_body_from_address(address)
-    endpoint = "assessor/"
-    address = address.to_s
-
-    response ||= connection.get("#{endpoint}") do |request|
-      request.params["address"] = "#{address}"
-    end
-
-    response_body = JSON.parse(response.body)
-
-    if response_body["status"] != "error"
-      response_body["results"][0]
-    else
-      raise "status #{response.status}: no response body, must be a bad request. check your .env, api key, and params foo"
-    end
-  end
-
   def get_homeowner(address)
     # api call to portland maps to get owner name
     # ex httpie call:
     # http https://www.portlandmaps.com/api/assessor/ 
     # api_key=="api_key_goes_here" address=="4445 ne wygant"
-    response_body = get_request_body_from_address(address)
-    
+    response_body = api_response_from(address)
+
     if response_body != nil
       owner = response_body["owner"]
       format_owner(owner)
@@ -105,7 +76,7 @@ module PortlandMaps::PortlandMapsApi
 
   def get_full_address(address)
     owner = get_homeowner(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
 
     address_street = response_body["address"]
     address_city = response_body["city"]
@@ -120,15 +91,10 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_lot_size(address)
-    endpoint = "detail/"
-
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     detail_id = response_body["property_id"]
 
-    response = connection.get("#{endpoint}") do |request|
-      request.params["detail_type"] = "assessor"
-      request.params["detail_id"] = "#{detail_id}"
-    end 
+    response = api_response_assessor(detail_id)
 
     body = JSON.parse(response.body)["general"]
     
@@ -136,15 +102,10 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_lot_zoning(address)
-    endpoint = "detail/"
-
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     detail_id = response_body["property_id"]
 
-    response = connection.get("#{endpoint}") do |request|
-      request.params["detail_type"] = "zoning"
-      request.params["detail_id"] = "#{detail_id}"
-    end  
+    response = api_response_zoning(detail_id)
 
     body = JSON.parse(response.body)["zoning"]
     
@@ -152,23 +113,17 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_market_value(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     market_value = response_body["market_value"]
     
     market_value = market_value&.to_s(:delimited)
   end
 
   def get_real_market_value(address)
-    endpoint = "detail/"
-
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     detail_id = response_body["property_id"]
 
-    response = connection.get("#{endpoint}") do |request|
-      request.params["detail_type"] = "assessor"
-      request.params["detail_id"] = "#{detail_id}"
-      request.params["sections"] = "*"
-    end
+    response = api_response_assessor(detail_id)
 
     body = JSON.parse(response.body)["assessment history"].first
     assesement_year = body["year"]
@@ -178,16 +133,10 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_property_taxes(address)
-    endpoint = "detail/"
-
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     detail_id = response_body["property_id"]
 
-    response = connection.get("#{endpoint}") do |request|
-      request.params["detail_type"] = "assessor"
-      request.params["detail_id"] = "#{detail_id}"
-      request.params["sections"] = "*"
-    end
+    response = api_response_assessor(detail_id)
 
     body = JSON.parse(response.body)["tax history"].first
     tax_year = body["year"]
@@ -197,23 +146,17 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_home_size(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     home_size_sqft = response_body["square_feet"]
     
     home_size_sqft&.to_s(:delimited)
   end
 
   def get_foundation_type(address)
-    endpoint = "detail/"
-
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     detail_id = response_body["property_id"]
 
-    response = connection.get("#{endpoint}") do |request|
-      request.params["detail_type"] = "assessor"
-      request.params["detail_id"] = "#{detail_id}"
-      request.params["sections"] = "*"
-    end
+    response = api_response_assessor(detail_id)
 
     body = JSON.parse(response.body)
     segments = body["improvements"]["details"].map{|seg| seg["segment_type"]}
@@ -231,13 +174,13 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_year_built(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     
     response_body["year_built"]
   end
 
   def get_location_coordinates(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     longitude = response_body["longitude"]
     latitude = response_body["latitude"]
     
@@ -245,7 +188,7 @@ module PortlandMaps::PortlandMapsApi
   end
 
   def get_neighborhood(address)
-    response_body = get_request_body_from_address(address)
+    response_body = api_response_from(address)
     neighborhood = response_body["neighborhood"]
 
     if neighborhood == "CULLY ASSOCIATION OF NEIGHBORS"
@@ -253,5 +196,58 @@ module PortlandMaps::PortlandMapsApi
     end
 
     neighborhood.capitalize
+  end
+
+  private
+
+  # Portland Maps API focused methods
+  # the idea is to keep API calls to a minimum
+  def connection
+    url = "https://www.portlandmaps.com/api/"
+
+    connection ||= Faraday.new(
+      url: "#{url}",
+      params: {api_key: "#{API_KEY}"},
+      headers: {"Content-Type" => "application/json"}
+    )
+  end
+
+  def api_response_from(address)
+    endpoint = "assessor/"
+    address = address.to_s
+
+    # notice the conditional assignment / instance variable:
+    # only make the API call if it hasn't already been made in this session.
+    @response_from_address ||= connection.get("#{endpoint}") do |request|
+      request.params["address"] = "#{address}"
+    end
+
+    response_body = JSON.parse(@response_from_address.body)
+
+    if response_body["status"] != "error"
+      response_body["results"][0]
+    else
+      raise "status #{@response_from_address.status}: no response body, must be a bad request. check your .env, api key, and params foo"
+    end
+  end
+
+  def api_response_detail(detail_id, detail_type)
+    endpoint = "detail/"
+
+    connection.get("#{endpoint}") do |request|
+      request.params["detail_type"] = "#{detail_type}"
+      request.params["detail_id"] = "#{detail_id}"
+      request.params["sections"] = "*"
+    end
+  end
+
+  def api_response_zoning(detail_id)
+    # notice the conditional assignment / instance variable:
+    # only make the API call if it hasn't already been made in this session.
+    @response_zoning ||= api_response_detail(detail_id, "zoning")
+  end
+
+  def api_response_assessor(detail_id)
+    @response_assessor ||= api_response_detail(detail_id, "assessor")
   end
 end
