@@ -15,7 +15,7 @@
       <%= f.input :address, 
         required: true,
         label: false,
-        input_html: { class: "input" }
+        input_html: { class: "input", placeholder: "7107 SE Holgate blvd", }
       %>
       <%= f.button :submit, value: "run", class: "run", data: { disable_with: "running..." } %>
     <% end %>
