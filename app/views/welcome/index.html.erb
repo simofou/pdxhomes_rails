@@ -15,13 +15,11 @@
       <%= f.input :address, 
         required: true,
         label: false,
-        input_html: { class: "input", placeholder: "7107 SE Holgate blvd", }
+        input_html: { class: "input", placeholder: "7107 se holgate blvd", }
       %>
       <%= f.button :submit, value: "run", class: "run", data: { disable_with: "running..." } %>
     <% end %>
   </div>
-
-  <p><%=@error%></p>
 
   <p>-</p>
 
