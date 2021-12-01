@@ -1,3 +1,19 @@
+class GoodnessValidator < ActiveModel::Validator
+  def validate(record)
+    if record.address.to_s.empty?
+      record.errors.add :base, "address can't be blank"
+    end
+
+    if record.address =~ /^[a-z]/ || record.address =~ /^[A-Z]/
+      record.errors.add :base, "address should start with a number"
+    end
+
+    if record.address.count(' ') < 2
+      record.errors.add :base, "address should contain at least 1 number, 1 prefix (i.e. ne, se), and 1 street name"
+    end
+  end
+end
+
 class Home
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -7,10 +23,7 @@ class Home
 
   attr_accessor :address
 
-  validates :address, presence: true
-  # # validates :address do |record, attr, value|
-  # #   record.errors.add attr, "starts with z." if value.start_with?("z")
-  # # end
+  validates_with AddressValidator
 
   FOOSTIMATE_CONSTANT = 1.069
 

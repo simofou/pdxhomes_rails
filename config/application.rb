@@ -19,6 +19,9 @@ module Pdxhomes
     # Autoload lib/ folder including all subdirectories
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
+    # Autoload validators folder!
+    config.autoload_paths += Dir["#{config.root}/app/validators/"]
+
     console do
       ActiveRecord::Base.connection
     end

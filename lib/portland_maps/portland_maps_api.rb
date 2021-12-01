@@ -213,7 +213,7 @@ module PortlandMaps::PortlandMapsApi
 
   def api_response_from(address) 
     endpoint = "assessor/"
-    address = address.to_s
+    address = address.to_s.downcase
     # notice the conditional assignment / instance variable:
     # only make the API call if it hasn't already been made in this session.
     @response_from_address ||= connection.get("#{endpoint}") do |request|
