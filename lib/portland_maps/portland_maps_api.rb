@@ -56,7 +56,7 @@ module PortlandMaps::PortlandMapsApi
     end
   end
 
-  # Portland Maps API methods
+  # Portland Maps methods
   def get_homeowner(address)
     # api call to portland maps to get owner name
     # ex httpie call:
@@ -199,7 +199,6 @@ module PortlandMaps::PortlandMapsApi
   end
 
   private
-
   # Portland Maps API focused methods
   # the idea is to keep API calls to a minimum
   def connection
@@ -212,10 +211,9 @@ module PortlandMaps::PortlandMapsApi
     )
   end
 
-  def api_response_from(address)
+  def api_response_from(address) 
     endpoint = "assessor/"
     address = address.to_s
-
     # notice the conditional assignment / instance variable:
     # only make the API call if it hasn't already been made in this session.
     @response_from_address ||= connection.get("#{endpoint}") do |request|
