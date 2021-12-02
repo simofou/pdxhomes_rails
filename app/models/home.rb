@@ -19,6 +19,7 @@ class Home
   include ActiveModel::Conversion
   include PortlandMaps::PortlandMapsApi
   include Zillow::ZillowApi
+  include WalkScore::WalkScoreApi
   extend ActiveModel::Naming
 
   attr_accessor :address
@@ -79,8 +80,11 @@ class Home
     get_neighborhood(address)
   end
 
+  def location_coordinates
+    get_location_coordinates(address)
+  end
+
   def zestimate
-    location_coordinates ||= get_location_coordinates(address)
     zestimate ||= get_zestimate(location_coordinates, address)
 
     zestimate.nil? ? " n/a" : zestimate
@@ -96,5 +100,19 @@ class Home
     else
       " n/a"
     end
+  end
+
+  def walk_score
+    @full_address ||= get_full_address(address)
+
+    get_walk_score(location_coordinates, full_address)
+  end
+
+  def walk_score_help_link
+    # not currently using this since the link is just:
+    # "https://www.redfin.com/how-walk-score-works" as of 12/21
+    @full_address ||= get_full_address(address)
+    
+    get_walk_score_help_link(location_coordinates, full_address)
   end
 end

@@ -17,13 +17,14 @@ module Zillow::ZillowApi
     address = address.upcase
     url = "https://api.bridgedataoutput.com/api/v2/zestimates"
   
-    response = Faraday.get(url) do |req|
+    response ||= Faraday.get(url) do |req|
       req.params['access_token'] = API_KEY 
       req.params['limit'] = 100
       req.params['fields'] = 'zestimate,address'
       req.params['near'] = location_coordinates
       req.params['radius'] = 0.1
     end
+
     response_body = JSON.parse(response.body)
     zillow_home_data = response_body["bundle"] 
     # array of hashes - each hash is a home that matches our query and contains :address, :zestimate...

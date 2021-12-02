@@ -83,11 +83,8 @@ module PortlandMaps::PortlandMapsApi
     address_state = response_body["state"]
     address_zip_code = response_body["zip_code_string"]
 
-    "
-      #{owner}
-      #{address_street}
-      #{address_city} #{address_state} #{address_zip_code}
-    "
+
+    "#{address_street} #{address_city} #{address_state} #{address_zip_code}"
   end
 
   def get_lot_size(address)
